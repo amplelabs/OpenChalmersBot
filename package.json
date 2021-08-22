@@ -1,0 +1,36 @@
+{
+  "name": "open-chalmers-bot",
+  "version": "1.0.0",
+  "description": "Backend components for Chalmers chat bot",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "@google/maps": "^1.0.2",
+    "compromise": "^11.14.3",
+    "google-spreadsheet": "^2.0.8",
+    "haversine": "^1.1.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.27",
+    "mongodb": "^3.4.0",
+    "mongoose": "^5.8.0",
+    "request": "^2.88.0",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.579.0",
+    "serverless-bundle": "^1.2.5",
+    "serverless-dotenv-plugin": "^2.1.1",
+    "serverless-offline": "^5.12.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amplelabs/amplelabs-chatbot.git"
+  },
+  "author": "Ample Labs",
+  "license": "MIT"
+}

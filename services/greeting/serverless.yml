@@ -1,0 +1,32 @@
+org: amplelabsdevelopers
+app: amplelabs-chatbot
+
+service: chatbot-greeting # NOTE: update this with your service name
+
+custom:
+  # Our stage is based on what is passed in when running serverless
+  # commands. Or fallsback to what we have set in the provider section.
+  stage: ${opt:stage, self:provider.stage}
+  dotenv:
+    basePath: ../../
+
+package:
+  individually: true
+  exclude:
+    - ./*.spec.js
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  deploymentBucket:
+    name: ${env:DEPLOYMENT_BUCKET}
+  region: us-east-1
+  timeout: 15
+
+plugins:
+  - serverless-bundle # Package our functions with Webpack
+  - serverless-offline
+
+functions:
+  fulfilment:
+    handler: greeting.fulfill

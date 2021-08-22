@@ -1,0 +1,51 @@
+org: amplelabsdevelopers
+app: amplelabs-chatbot
+
+service: chatbot-find-crisis # NOTE: update this with your service name
+
+custom:
+  # Our stage is based on what is passed in when running serverless
+  # commands. Or fallsback to what we have set in the provider section.
+  stage: ${opt:stage, self:provider.stage}
+  dotenv:
+    basePath: ../../
+    
+package:
+  individually: true
+  exclude:
+    - ./*.spec.js
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  deploymentBucket:
+    name: ${env:DEPLOYMENT_BUCKET}
+  region: us-east-1
+  timeout: 15
+
+plugins:
+  - serverless-bundle # Package our functions with Webpack
+  - serverless-offline
+#  - serverless-dotenv-plugin # Load .env as environment variables
+
+functions:
+  lex-validations:
+    handler: find-crisis.validations
+    environment:
+      SERVICE_NAME: crisis line
+      SERVICE_TYPE: crisis
+      GOOGLE_MAPS_DIRECTIONS_KEY: ${env:GOOGLE_MAPS_DIRECTIONS_KEY}
+      GOOGLE_MAPS_KEY: ${env:GOOGLE_MAPS_KEY}
+      GOOGLE_API_URL: ${env:GOOGLE_API_URL}
+      MONGO_URI: ${env:MONGO_URI}
+
+  fulfilment:
+    handler: find-crisis.fulfill
+    environment:
+      SERVICE_NAME: crisis
+      SERVICE_TYPE: crisis
+      GOOGLE_MAPS_DIRECTIONS_KEY: ${env:GOOGLE_MAPS_DIRECTIONS_KEY}
+      GOOGLE_MAPS_KEY: ${env:GOOGLE_MAPS_KEY}
+      GOOGLE_API_URL: ${env:GOOGLE_API_URL}
+      MONGO_URI: ${env:MONGO_URI}
+    

@@ -1,0 +1,1854 @@
+{
+  "metadata": {
+    "schemaVersion": "1.0",
+    "importType": "LEX",
+    "importFormat": "JSON"
+  },
+  "resource": {
+    "name": "OpenChalmers",
+    "version": "1",
+    "intents": [
+      {
+        "name": "Feedback_NPS",
+        "version": "19",
+        "fulfillmentActivity": {
+          "type": "ReturnIntent"
+        },
+        "sampleUtterances": [
+          "I have feedback"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [],
+            "slotType": "UseGPS",
+            "slotTypeVersion": "3",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Do you have any feedback for me, or suggestions of things I should learn?"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"buttons\":[{\"text\":\"Yes\",\"value\":\"Yes\"},{\"text\":\"No\",\"value\":\"No\"}]}]}",
+              "maxAttempts": 2
+            },
+            "priority": 1,
+            "name": "Feedback"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "helpfulness",
+            "slotTypeVersion": "2",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Thanks for your response! Your feedback will help me become more intelligent over time. ## How helpful did you find me today?"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"buttons\":[{\"text\":\"😀\",\"value\":\"Very Helpful\"},{\"text\":\"🙂\",\"value\":\"Helpful\"},{\"text\":\"😐\",\"value\":\"Somewhat\"},{\"text\":\"🙁\",\"value\":\"Not Very Helpful\"},{\"text\":\"😠\",\"value\":\"Not Helpful At All\"}]}]}",
+              "maxAttempts": 2
+            },
+            "priority": 2,
+            "name": "Helpfulness"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "WouldRecommend",
+            "slotTypeVersion": "2",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Great! Would you recommend me to someone you know?"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"buttons\":[{\"text\":\"👍\",\"value\":\"Yes\"},{\"text\":\"🤔\",\"value\":\"Maybe\"},{\"text\":\"👎\",\"value\":\"No\"}]}]}",
+              "maxAttempts": 2
+            },
+            "priority": 3,
+            "name": "WouldRecommend"
+          }
+        ],
+        "conclusionStatement": {
+          "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"buttons\":[{\"text\":\"Restart\",\"value\":\"Restart\"}]}]}",
+          "messages": [
+            {
+              "groupNumber": 1,
+              "contentType": "CustomPayload",
+              "content": "Got it, thank you for the feedback my friend! ## If you have any further questions, or were unable to find the information you need, you can call <a href=\"tel:211\">211</a>, or chat at <a href=\"https://211ontario.ca/chat/\">https://211ontario.ca/chat/</a>"
+            }
+          ]
+        }
+      },
+      {
+        "name": "CrisisHelpHelper",
+        "version": "23",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:<aws account number>:function:chatbot-find-crisis-<env>-fulfilment",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "Crisis",
+          "depressed",
+          "suicide"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [],
+            "slotType": "CrisisType",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "If you have an immediate medical emergency, please contact <a href='tel:911'>911</a>. ## I have crisis hotlines for:"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"buttons\":[{\"text\":\"📞 General\",\"value\":\"General\"},{\"text\":\"👦🏻 Youth\",\"value\":\"Youth\"},{\"text\":\"👩🏽 Women\",\"value\":\"Women\"},{\"text\":\"🌈 LGBTQ2S\",\"value\":\"LGBTQ2S\"},{\"text\":\"💊 Mental Health + Addictions\",\"value\":\"Mental Health + Addictions\"}]}]}",
+              "maxAttempts": 2
+            },
+            "priority": 1,
+            "name": "CrisisType"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.DATE",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 4,
+            "name": "Date"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.LandmarksOrHistoricalBuildings",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 6,
+            "name": "Intersection"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "MealNow",
+            "slotTypeVersion": "3",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 3,
+            "name": "mealNow"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.TIME",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 5,
+            "name": "Time"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "UseGPS",
+            "slotTypeVersion": "3",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 2,
+            "name": "useGPS"
+          }
+        ],
+        "dialogCodeHook": {
+          "uri": "arn:aws:lambda:us-east-1:<aws account number>:function:chatbot-find-crisis-<env>-lex-validations",
+          "messageVersion": "1.0"
+        }
+      },
+      {
+        "name": "Other_FindClothing",
+        "version": "18",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:<aws account number>:function:chatbot-find-clothing-<env>-lex-fulfillment",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "Clothing"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [
+              "{Age} years old",
+              "I am {Age}"
+            ],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\"}",
+              "maxAttempts": 2
+            },
+            "priority": 14,
+            "name": "Age"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "ShowAlt",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 12,
+            "name": "AltResult"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.DATE",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 11,
+            "name": "Date"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "Eligibility",
+            "slotTypeVersion": "2",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 21,
+            "name": "Eligibility"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "Gender",
+            "slotTypeVersion": "4",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 15,
+            "name": "Gender"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.LandmarksOrHistoricalBuildings",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 6,
+            "name": "Intersection"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "LGBTQ",
+            "slotTypeVersion": "2",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 22,
+            "name": "LGBTQ"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "MealNow",
+            "slotTypeVersion": "3",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 9,
+            "name": "mealNow"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 10,
+            "name": "serviceCounter"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "ShowMore",
+            "slotTypeVersion": "7",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 23,
+            "name": "ShowMore"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.TIME",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 7,
+            "name": "Time"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "UseGPS",
+            "slotTypeVersion": "3",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 20,
+            "name": "useGPS"
+          }
+        ],
+        "dialogCodeHook": {
+          "uri": "arn:aws:lambda:us-east-1:<aws account number>:function:chatbot-find-clothing-<env>-lex-validations",
+          "messageVersion": "1.0"
+        }
+      },
+      {
+        "name": "Food_FreeMeal",
+        "version": "39",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:<aws account number>:function:chatbot-find-meals-<env>-lex-fulfillment",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "Free hot meals",
+          "Free Hot Meals",
+          "Find Free Meals",
+          "I am looking for free hot meals",
+          "I'm looking for a meal",
+          "Free Meal",
+          "I'm looking for something to eat",
+          "When is the next available free meal",
+          "Where is the next available free meal",
+          "Where can I get something to eat",
+          "Where is the nearest soup kitchen",
+          "meal",
+          "meals",
+          "Meal"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [
+              "I am {Age}",
+              "{Age} years old"
+            ],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\"}",
+              "maxAttempts": 2
+            },
+            "priority": 14,
+            "name": "Age"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "ShowAlt",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 12,
+            "name": "AltResult"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.DATE",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 11,
+            "name": "Date"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "Eligibility",
+            "slotTypeVersion": "2",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 21,
+            "name": "Eligibility"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "Gender",
+            "slotTypeVersion": "4",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 15,
+            "name": "Gender"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.LandmarksOrHistoricalBuildings",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 6,
+            "name": "Intersection"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "LGBTQ",
+            "slotTypeVersion": "2",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 22,
+            "name": "LGBTQ"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "MealNow",
+            "slotTypeVersion": "3",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 9,
+            "name": "mealNow"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 10,
+            "name": "serviceCounter"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "ShowMore",
+            "slotTypeVersion": "7",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 23,
+            "name": "ShowMore"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.TIME",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 7,
+            "name": "Time"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "UseGPS",
+            "slotTypeVersion": "3",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 20,
+            "name": "useGPS"
+          }
+        ],
+        "dialogCodeHook": {
+          "uri": "arn:aws:lambda:us-east-1:<aws account number>:function:chatbot-find-meals-<env>-lex-validations",
+          "messageVersion": "1.0"
+        },
+        "conclusionStatement": {
+          "messages": [
+            {
+              "groupNumber": 1,
+              "contentType": "CustomPayload",
+              "content": "Hello my name is Chalmers, and I am what is known as a \"chat-bot\""
+            }
+          ]
+        }
+      },
+      {
+        "name": "Housing_Shelter",
+        "version": "34",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:<aws account number>:function:chatbot-find-shelter-<env>-lex-fulfillment",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "Overnight Shelter",
+          "I need somewhere to sleep",
+          "shelter",
+          "Shelter"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [
+              "I am {Age}",
+              "{Age} years old"
+            ],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\"}",
+              "maxAttempts": 2
+            },
+            "priority": 14,
+            "name": "Age"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "ShowAlt",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 12,
+            "name": "AltResult"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.DATE",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 11,
+            "name": "Date"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "Eligibility",
+            "slotTypeVersion": "2",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 21,
+            "name": "Eligibility"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "ExtraHelp",
+            "slotTypeVersion": "4",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 24,
+            "name": "ExtraHelp"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "Gender",
+            "slotTypeVersion": "4",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 15,
+            "name": "Gender"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.LandmarksOrHistoricalBuildings",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 6,
+            "name": "Intersection"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "LGBTQ",
+            "slotTypeVersion": "2",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 22,
+            "name": "LGBTQ"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "MealNow",
+            "slotTypeVersion": "3",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 9,
+            "name": "mealNow"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 10,
+            "name": "serviceCounter"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "ShowMore",
+            "slotTypeVersion": "7",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 23,
+            "name": "ShowMore"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.TIME",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 7,
+            "name": "Time"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "UseGPS",
+            "slotTypeVersion": "3",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 20,
+            "name": "useGPS"
+          }
+        ],
+        "dialogCodeHook": {
+          "uri": "arn:aws:lambda:us-east-1:<aws account number>:function:chatbot-find-shelter-<env>-lex-validations",
+          "messageVersion": "1.0"
+        }
+      },
+      {
+        "name": "Food_FoodBank",
+        "version": "19",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:<aws account number>:function:chatbot-find-food-bank-<env>-lex-fulfillment",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "Food Banks",
+          "I'm looking for food banks",
+          "I'm looking for a food bank",
+          "I'm looking for a food bank near me",
+          "I'm looking for free groceries",
+          "I'm looking for food banks in my neighbourhood",
+          "I'm looking for food banks with good quality food",
+          "Do you know where I can find food banks",
+          "I'm looking for food banks for my family",
+          "Where is the closest food bank",
+          "Food Banks close to me"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [
+              "{Age} years old",
+              "I am {Age}"
+            ],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\"}",
+              "maxAttempts": 2
+            },
+            "priority": 14,
+            "name": "Age"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "ShowAlt",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 12,
+            "name": "AltResult"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.DATE",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 11,
+            "name": "Date"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "Eligibility",
+            "slotTypeVersion": "2",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 21,
+            "name": "Eligibility"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "Gender",
+            "slotTypeVersion": "4",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 15,
+            "name": "Gender"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.LandmarksOrHistoricalBuildings",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 6,
+            "name": "Intersection"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "LGBTQ",
+            "slotTypeVersion": "2",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 22,
+            "name": "LGBTQ"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "MealNow",
+            "slotTypeVersion": "3",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 9,
+            "name": "mealNow"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 10,
+            "name": "serviceCounter"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "ShowMore",
+            "slotTypeVersion": "7",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "- "
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 23,
+            "name": "ShowMore"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.TIME",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 7,
+            "name": "Time"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "UseGPS",
+            "slotTypeVersion": "3",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 20,
+            "name": "useGPS"
+          }
+        ],
+        "dialogCodeHook": {
+          "uri": "arn:aws:lambda:us-east-1:<aws account number>:function:chatbot-find-food-bank-<env>-lex-validations",
+          "messageVersion": "1.0"
+        }
+      },
+      {
+        "name": "ThingsToDoHelper",
+        "version": "6",
+        "fulfillmentActivity": {
+          "type": "ReturnIntent"
+        },
+        "sampleUtterances": [
+          "Things To Do"
+        ],
+        "slots": [],
+        "conclusionStatement": {
+          "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"buttons\":[{\"text\":\"🏡 Drop-Ins\",\"value\":\"Drop-Ins\"}]}]}",
+          "messages": [
+            {
+              "groupNumber": 1,
+              "contentType": "PlainText",
+              "content": "Here are things I can recommend for you to do during the day:"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Things_Dropins",
+        "version": "19",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:<aws account number>:function:chatbot-find-dropin-<env>-lex-fulfillment",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "Drop-ins",
+          "Drop-Ins",
+          "Drop-in",
+          "Dropins"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [
+              "{Age} years old",
+              "I am {Age}"
+            ],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\"}",
+              "maxAttempts": 2
+            },
+            "priority": 14,
+            "name": "Age"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "ShowAlt",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 12,
+            "name": "AltResult"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.DATE",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 11,
+            "name": "Date"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "Eligibility",
+            "slotTypeVersion": "2",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 21,
+            "name": "Eligibility"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "Gender",
+            "slotTypeVersion": "4",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 15,
+            "name": "Gender"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.LandmarksOrHistoricalBuildings",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 6,
+            "name": "Intersection"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "LGBTQ",
+            "slotTypeVersion": "2",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 22,
+            "name": "LGBTQ"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "MealNow",
+            "slotTypeVersion": "3",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 9,
+            "name": "mealNow"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 10,
+            "name": "serviceCounter"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "ShowMore",
+            "slotTypeVersion": "7",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 23,
+            "name": "ShowMore"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.TIME",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 7,
+            "name": "Time"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "UseGPS",
+            "slotTypeVersion": "3",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Optional",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "-"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 20,
+            "name": "useGPS"
+          }
+        ],
+        "dialogCodeHook": {
+          "uri": "arn:aws:lambda:us-east-1:<aws account number>:function:chatbot-find-dropin-<env>-lex-validations",
+          "messageVersion": "1.0"
+        }
+      },
+      {
+        "name": "Crisis_WomensHelpLine",
+        "version": "18",
+        "fulfillmentActivity": {
+          "type": "ReturnIntent"
+        },
+        "sampleUtterances": [
+          "A.W.H.L",
+          "women's helpline",
+          "helpline",
+          "he hit me",
+          "she hit me",
+          "I am afraid of him",
+          "I am afraid of her",
+          "I am being abused",
+          "how can I get away from my partner",
+          "he is controlling",
+          "she is controlling",
+          "am I being gaslit",
+          "is this gaslighting",
+          "domestic violence help"
+        ],
+        "slots": [],
+        "conclusionStatement": {
+          "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"title\":\"AWHL\",\"buttons\":[{\"text\":\"Restart\",\"value\":\"restart\"}]}]}",
+          "messages": [
+            {
+              "groupNumber": 1,
+              "contentType": "CustomPayload",
+              "content": "It sounds like you may be experiencing domestic violence. ## <b>Domestic violence can happen with a partner, friend, coworker or parent. Here are some of the types of violence: ## <b>Physical Violence:</b><br>- Inducing harm like hitting ## <b>Sexual Violence:</b><br>- Sexual activity that is without consent ## <b>Emotional Violence:</b><br>- Narcissistic behavior, manipulation, making partner feel \"crazy\" ## <b>Financial Violence:</b><br>- Control over, restricting access to money ## <b>Reproductive Violence:</b><br>- Control over contraceptives (condoms, birth control) ## The Assaulted Women's HelpLine <a href=\"tel:416-863-0511\">416-863-0511</a> provides crisis counselling, emotional support, information and referrals to emergency shelters, legal information and community services, and resources for abused women. TTY <a href=\"tel:1-866-863-7868\">1-866-863-7868</a>. Confidental online chat: <a href=\"https://www.awhl.org/online-chat\">https://www.awhl.org/online-chat</a>"
+            }
+          ]
+        }
+      },
+      {
+        "name": "FoodHelpHelper",
+        "version": "11",
+        "fulfillmentActivity": {
+          "type": "ReturnIntent"
+        },
+        "sampleUtterances": [
+          "Food",
+          "I am hungry",
+          "hungry",
+          "eat"
+        ],
+        "slots": [],
+        "conclusionStatement": {
+          "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"buttons\":[{\"text\":\"🍴Free Hot Meals\",\"value\":\"Free Hot Meals\"},{\"text\":\"🍞 Food Banks\",\"value\":\"Food Banks\"}]}]}",
+          "messages": [
+            {
+              "groupNumber": 1,
+              "contentType": "CustomPayload",
+              "content": "What kind of food are you looking for?"
+            }
+          ]
+        }
+      },
+      {
+        "name": "BaseGreeting",
+        "version": "28",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:<aws account number>:function:chatbot-greeting-<env>-fulfilment",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "restart",
+          "Restart"
+        ],
+        "slots": []
+      }
+    ],
+    "slotTypes": [
+      {
+        "name": "MealNow",
+        "version": "3",
+        "enumerationValues": [
+          {
+            "value": "Later"
+          },
+          {
+            "value": "Now"
+          },
+          {
+            "value": "now"
+          }
+        ],
+        "valueSelectionStrategy": "ORIGINAL_VALUE"
+      },
+      {
+        "name": "ExtraHelp",
+        "version": "4",
+        "enumerationValues": [
+          {
+            "value": "okay"
+          },
+          {
+            "value": "Okay"
+          },
+          {
+            "value": "Numbers"
+          },
+          {
+            "value": "yes"
+          },
+          {
+            "value": "Yes"
+          },
+          {
+            "value": "Thanks"
+          }
+        ],
+        "valueSelectionStrategy": "ORIGINAL_VALUE"
+      },
+      {
+        "name": "Eligibility",
+        "version": "2",
+        "enumerationValues": [
+          {
+            "value": "no",
+            "synonyms": [
+              "nah",
+              "no thanks"
+            ]
+          },
+          {
+            "value": "yes",
+            "synonyms": [
+              "sure",
+              "okay"
+            ]
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      },
+      {
+        "description": "Would you recommend?",
+        "name": "WouldRecommend",
+        "version": "2",
+        "enumerationValues": [
+          {
+            "value": "No",
+            "synonyms": [
+              "no",
+              "👎"
+            ]
+          },
+          {
+            "value": "Maybe",
+            "synonyms": [
+              "maybe",
+              "🤔"
+            ]
+          },
+          {
+            "value": "Yes",
+            "synonyms": [
+              "yes",
+              "👍"
+            ]
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      },
+      {
+        "description": "For LGBTQ eligibility",
+        "name": "LGBTQ",
+        "version": "2",
+        "enumerationValues": [
+          {
+            "value": "Friendly",
+            "synonyms": [
+              "friendly",
+              " LGBTQ Friendly"
+            ]
+          },
+          {
+            "value": "Skip",
+            "synonyms": [
+              "skip"
+            ]
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      },
+      {
+        "description": "show more meal result until users are happy with the result",
+        "name": "ShowMore",
+        "version": "7",
+        "enumerationValues": [
+          {
+            "value": "fine",
+            "synonyms": [
+              "Fine",
+              " Got it, thanks"
+            ]
+          },
+          {
+            "value": "options",
+            "synonyms": [
+              " Age and Gender Options"
+            ]
+          },
+          {
+            "value": "time",
+            "synonyms": [
+              "Time"
+            ]
+          },
+          {
+            "value": "option",
+            "synonyms": [
+              "Another option"
+            ]
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      },
+      {
+        "name": "Gender",
+        "version": "4",
+        "enumerationValues": [
+          {
+            "value": "LGBTQ"
+          },
+          {
+            "value": "Skip"
+          },
+          {
+            "value": "non-binary"
+          },
+          {
+            "value": "female",
+            "synonyms": [
+              "woman",
+              "girl",
+              "gal"
+            ]
+          },
+          {
+            "value": "Non-binary"
+          },
+          {
+            "value": "mix"
+          },
+          {
+            "value": "male"
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      },
+      {
+        "name": "UseGPS",
+        "version": "3",
+        "enumerationValues": [
+          {
+            "value": "No",
+            "synonyms": []
+          },
+          {
+            "value": "Yes",
+            "synonyms": []
+          }
+        ],
+        "valueSelectionStrategy": "ORIGINAL_VALUE"
+      },
+      {
+        "name": "ShowAlt",
+        "version": "1",
+        "enumerationValues": [
+          {
+            "value": "yes",
+            "synonyms": []
+          }
+        ],
+        "valueSelectionStrategy": "ORIGINAL_VALUE"
+      },
+      {
+        "name": "custom_yes_no",
+        "version": "1",
+        "enumerationValues": [
+          {
+            "value": "no",
+            "synonyms": [
+              "No"
+            ]
+          },
+          {
+            "value": "yes",
+            "synonyms": [
+              "Yes"
+            ]
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      },
+      {
+        "name": "CrisisType",
+        "version": "1",
+        "enumerationValues": [
+          {
+            "value": "Women"
+          },
+          {
+            "value": "General"
+          },
+          {
+            "value": "Youth"
+          },
+          {
+            "value": "Mental Health + Addictions"
+          },
+          {
+            "value": "LGBTQ2S"
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      },
+      {
+        "description": "How helpful was the bot",
+        "name": "helpfulness",
+        "version": "2",
+        "enumerationValues": [
+          {
+            "value": "Not Very Helpful",
+            "synonyms": [
+              "🙁"
+            ]
+          },
+          {
+            "value": "Somewhat",
+            "synonyms": [
+              "😐"
+            ]
+          },
+          {
+            "value": "Very Helpful",
+            "synonyms": [
+              "😀"
+            ]
+          },
+          {
+            "value": "Not Helpful At All",
+            "synonyms": [
+              "😠"
+            ]
+          },
+          {
+            "value": "Helpful",
+            "synonyms": [
+              "🙂"
+            ]
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      }
+    ],
+    "voiceId": "Matthew",
+    "childDirected": false,
+    "locale": "en-US",
+    "idleSessionTTLInSeconds": 900,
+    "clarificationPrompt": {
+      "messages": [
+        {
+          "contentType": "PlainText",
+          "content": "Sorry I can't help with this at the moment. You can call <a href='tel:211'>211</a> to speak with a live agent, or chat at <a href=\"https://211ontario.ca/chat/\">https://211ontario.ca/chat/</a>"
+        }
+      ],
+      "maxAttempts": 5
+    },
+    "abortStatement": {
+      "messages": [
+        {
+          "contentType": "PlainText",
+          "content": "Sorry I can't help with this at the moment. You can call <a href='tel:211'>211</a> to speak with a live agent, or chat at <a href=\"https://211ontario.ca/chat/\">https://211ontario.ca/chat/</a>"
+        }
+      ]
+    },
+    "detectSentiment": true,
+    "enableModelImprovements": false
+  }
+}
