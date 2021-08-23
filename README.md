@@ -76,7 +76,7 @@ export DEPLOYMENT_BUCKET=<your s3 deployment bucket>
 export GOOGLE_MAPS_DIRECTIONS_KEY=<your google map direction key>
 export GOOGLE_MAPS_KEY=<your google map key>
 export GOOGLE_API_URL=https://maps.googleapis.com/maps/api/directions/json
-export MONGO_URI=<your MongoDB uri> # e.g. mongodb+srv://<user>:<password>@cluster0.0dpqf.mongodb.net/Downloads
+export MONGO_URI=<your MongoDB uri> # e.g. mongodb+srv://<user>:<password>@cluster0.0dpqf.mongodb.net/<name of your db>?retryWrites=true&w=majority
 ```
   - NOTE: you will need a AWS `S3` bucket for deployment. See official aws document for instruction.
 3. Register an account with `https://app.serverless.com/`. Create an `app` as per instruction from `serverless.com`
@@ -143,6 +143,6 @@ For example, the unauthenticated user IAM role from my deployment is `chalmers-b
 ```
 
 You will need to add your Lex chat bot info indicated above. You can also give this role to all your Lex bot, which usually is not a good idea.
-THere are two roles you need to modify the same way, and you can just do it with the AWS IAM console. The `<YOUR BOT>` name can be find in the AWS Lex console. The `arn` for these roles will be need by the front end also, otherwise it won't have the permission to call any Lex functions.
+THere are two roles you need to modify the same way, and you can just do it with the AWS IAM console. The `<YOUR BOT>` name can be find in the AWS Lex console. 
 
 
