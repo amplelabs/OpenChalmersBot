@@ -18,7 +18,6 @@ Chalmers bot is developed with `Node.js`, and `nvm` [here](https://github.com/nv
 Beside the software in the repo, the following external dependences are required for Chalmers to funcion properly.
 - AWS account: Chalmers is using Lex for it natural language processing.
 - Google Cloud Platform (GCP): Google map service is required for geo-locationing (Google Maps, and Google Maps Directions API)
-- twillo: for user feedback via text messaging (https://www.twilio.com)
 - MongoDB: Chalmers is using mongoDB cloud service (MongoDB Atlas https://www.mongodb.com/cloud/atlas)
 - Serverless framework: for handling AWS lambda function provisioning and deployment
 
