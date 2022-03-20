@@ -23,7 +23,7 @@ export default class ImportFormatter {
     this.resourceId = m.resourceId;
     this.language = m.language ? m.language : [];
     this.youth = !!(m.age && m.age[0] > 0 && m.age[1] <= 25);
-    this.operatingHours = m.operatingHours.weeklyOperatingHours;
+    this.operatingHours = m.operatingHours; // .weeklyOperatingHours;
     this.specialHours = m.specialHours ? m.specialHours : false;
     if (m.dataSourceMeta.sourceResourceId) {
       this.sourceResourceId = m.dataSourceMeta.sourceResourceId;

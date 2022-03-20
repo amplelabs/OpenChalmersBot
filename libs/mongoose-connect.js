@@ -7,6 +7,22 @@ import { getCurrentRegionAliases } from "../libs/distance";
 let conn = null;
 const uri = process.env.MONGO_URI;
 
+const timeStrToTime = (str, reqDate) => {
+  const tmp = str.split(":");
+  const hr = Number(tmp[0]);
+  const min = Number(tmp[1]);
+  return moment.tz(
+    [
+      reqDate.year(),
+      reqDate.month(),
+      reqDate.date(),
+      hr,
+      min
+    ],
+    "America/Toronto"
+  )
+}
+
 export async function findServices(event, context, serviceType) {
   // Make sure to add this so you can re-use `conn` between function calls.
   // See https://www.mongodb.com/blog/post/serverless-development-with-nodejs-aws-lambda-mongodb-atlas
@@ -35,224 +51,44 @@ export async function findServices(event, context, serviceType) {
   // Ugly transformation to make it work with existing logic
   const results = [];
   const date = moment.tz(event.currentIntent.slots.Date, "America/Toronto");
-  documents.forEach((record) => {
-    const specialCloseHours = [];
-    const specialHoursArray = [];
-    const doc = record._doc;
-    // Special Close Hours
-    if (doc.operatingHours.specialCloseHours) {
-      const reducedCloseResults = doc.operatingHours.specialCloseHours.reduce(
-        (acc, val) => {
-          if (
-            moment(val.startDate)
-              .tz("America/Toronto")
-              .isSameOrBefore(date, "day") &&
-            moment(val.endDate).tz("America/Toronto").isSameOrAfter(date, "day")
-          ) {
-            acc.push(val);
-          }
-          return acc;
-        },
-        []
-      );
-      // If there are special close hours on this day
-      specialCloseHours.push(...reducedCloseResults);
-      specialHoursArray.push(...specialCloseHours);
+  
+  for (const m of documents) {
+    let item = {
+      address: m.address,
+      organizationName : m.organizationName,
+      program : m.program,
+      startTime : m.startTime,
+      endTime : m.endTime,
+      dayOfWeek : m.dayOfWeek,
+      type : m.type,
+      notes : m.notes,
+      lgbtq : m.LGBTQ,
+      latitude : m.latitude,
+      longitude : m.longitude,
+      gender : m.gender,
+      age : m.age,
+      race : m.race,
+      distance : m.distance,
+      phonenumber : m.phonenumber,
+      website : m.website,
+      resourceId : m.resourceId,
+      language: m.language,
+      operatingHours: m.operatingHours,
+      dataSourceMeta: {},
     }
-    // Special Open Hours
-    if (doc.operatingHours.specialOpenHours) {
-      const specialOpenHours = doc.operatingHours.specialOpenHours;
-      const reducedOpenResults = doc.operatingHours.specialOpenHours.reduce(
-        (acc, val) => {
-          if (
-            moment(val.startDate)
-              .tz("America/Toronto")
-              .isSameOrBefore(date, "day") &&
-            moment(val.endDate).tz("America/Toronto").isSameOrAfter(date, "day")
-          ) {
-            acc.push(val);
-          }
-          return acc;
-        },
-        []
-      );
-      if (reducedOpenResults.length) {
-        for (let openAvailability of reducedOpenResults) {
-          if (specialCloseHours.length) {
-            for (let closeAvailability of specialCloseHours) {
-              if (
-                moment(openAvailability.startDate).isSameOrAfter(
-                  closeAvailability.startDate
-                ) &&
-                moment(openAvailability.startDate).isBefore(
-                  closeAvailability.endDate
-                )
-              ) {
-                if (
-                  moment(openAvailability.endDate).isAfter(
-                    closeAvailability.endDate
-                  )
-                ) {
-                  openAvailability.startDate = closeAvailability.endDate;
-                } else {
-                  openAvailability.startDate = null;
-                  openAvailability.endDate = null;
-                }
-              } else if (
-                moment(openAvailability.startDate).isBefore(
-                  closeAvailability.startDate
-                )
-              ) {
-                if (
-                  moment(openAvailability.endDate).isAfter(
-                    closeAvailability.startDate
-                  )
-                ) {
-                  if (
-                    moment(openAvailability.endDate).isAfter(
-                      closeAvailability.endDate
-                    )
-                  ) {
-                    // add new record to specialOpenHours, starting at closeAvailability.endDate
-                    specialOpenHours.push({
-                      startDate: closeAvailability.endDate,
-                      endDate: openAvailability.endDate,
-                    });
-                  }
-                  openAvailability.endDate = closeAvailability.startDate;
-                }
-              }
-            }
-          }
-          if (openAvailability.startDate && openAvailability.endDate) {
-            specialHoursArray.push(openAvailability);
-            let res = Object.assign(
-              {
-                startTime: moment(openAvailability.startDate)
-                  .tz("America/Toronto")
-                  .format("HH:mm"),
-                endTime: moment(openAvailability.endDate)
-                  .tz("America/Toronto")
-                  .format("HH:mm"),
-                dayOfWeek: [
-                  moment(openAvailability.startDate)
-                    .tz("America/Toronto")
-                    .format("ddd"),
-                ],
-                specialHours: true,
-              },
-              doc
-            );
-            results.push(res);
-          }
-        }
+
+    // confirm do i need to check time -- open or close etc.
+    for (let hr of m.operatingHours) {
+      let o = Object.assign({}, item);
+      o.operatingHours = {
+        startTime: timeStrToTime(hr.startTime, date),
+        endTime: timeStrToTime(hr.endTime, date),
+        dayOfWeek: hr.dayOfWeek
       }
-    }
-    // Regular Operating Hours
-    let opHours = doc.operatingHours.weeklyOperatingHours;
-    for (let weeklyAvail of opHours) {
-      if (
-        specialHoursArray.length &&
-        weeklyAvail.startTime &&
-        weeklyAvail.endTime
-      ) {
-        let startSplit = weeklyAvail.startTime.split(":");
-        let endSplit = weeklyAvail.endTime.split(":");
-        let openAvailability = {
-          startDate: moment.tz(
-            [
-              date.year(),
-              date.month(),
-              date.date(),
-              Number(startSplit[0]),
-              Number(startSplit[1]),
-            ],
-            "America/Toronto"
-          ),
-          endDate: moment.tz(
-            [
-              date.year(),
-              date.month(),
-              date.date(),
-              Number(endSplit[0]),
-              Number(endSplit[1]),
-            ],
-            "America/Toronto"
-          ),
-        };
-        for (let specialAvailability of specialHoursArray) {
-          if (
-            moment(openAvailability.startDate).isSameOrAfter(
-              specialAvailability.startDate
-            ) &&
-            moment(openAvailability.startDate).isBefore(
-              specialAvailability.endDate
-            )
-          ) {
-            if (
-              moment(openAvailability.endDate).isAfter(
-                specialAvailability.endDate
-              )
-            ) {
-              openAvailability.startDate = moment(specialAvailability.endDate);
-              weeklyAvail.startTime = moment(openAvailability.startDate)
-                .tz("America/Toronto")
-                .format("HH:mm");
-            } else {
-              weeklyAvail.startTime = null;
-              weeklyAvail.endTime = null;
-            }
-          } else if (
-            moment(openAvailability.startDate).isBefore(
-              specialAvailability.startDate
-            )
-          ) {
-            if (
-              moment(openAvailability.endDate).isAfter(
-                specialAvailability.startDate
-              )
-            ) {
-              if (
-                moment(openAvailability.endDate).isAfter(
-                  specialAvailability.endDate
-                )
-              ) {
-                // add new record to opHours, starting at specialAvailability.endDate
-                opHours.push({
-                  startTime: moment(specialAvailability.endDate)
-                    .tz("America/Toronto")
-                    .format("HH:mm"),
-                  endTime: moment(openAvailability.endDate)
-                    .tz("America/Toronto")
-                    .format("HH:mm"),
-                  dayOfWeek: [
-                    moment(specialAvailability.endDate)
-                      .tz("America/Toronto")
-                      .format("ddd"),
-                  ],
-                });
-              }
-              openAvailability.endDate = moment(specialAvailability.startDate);
-              weeklyAvail.endTime = moment(openAvailability.endDate)
-                .tz("America/Toronto")
-                .format("HH:mm");
-            }
-          }
-        }
-      }
-      if (weeklyAvail.startTime && weeklyAvail.endTime) {
-        let new_record = Object.assign(
-          {
-            startTime: weeklyAvail.startTime,
-            endTime: weeklyAvail.endTime,
-            dayOfWeek: [weeklyAvail.dayOfWeek],
-          },
-          doc
-        );
-        results.push(new_record);
-      }
-    }
-  });
+      results.push(o)
+    }    
+  }
+
   return results;
 }
 
