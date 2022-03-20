@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import uuidv4 from "uuid/v4";
+import uuidv4 from "uuid/v4.js";
 
 const Schema = mongoose.Schema;
 
@@ -36,7 +36,6 @@ const serviceSchema = new Schema(
       type: String
     },
     operatingHours: {
-      weeklyOperatingHours: {
         type: [
           {
             startTime: {
@@ -57,37 +56,6 @@ const serviceSchema = new Schema(
           }
         ],
         required: false
-      },
-      specialOpenHours: {
-        type: [
-          {
-            startDate: {
-              type: Date
-            },
-            endDate: {
-              type: Date
-            }
-          }
-        ],
-        required: false
-      },
-      specialCloseHours: {
-        type: [
-          {
-            startDate: {
-              type: Date
-            },
-            endDate: {
-              type: Date
-            }
-          }
-        ],
-        required: false
-      },
-      hoursRequireReviewBy: {
-        type: Date,
-        default: null
-      }
     },
     type: {
       type: String
